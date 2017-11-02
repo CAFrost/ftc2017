@@ -31,7 +31,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /**
  * Created by cafrostrobotics on 10/31/2017.
  */
-@Autonomous(name="Relic Recovery", group="2017")
+@Autonomous(name="A:Relic Recovery", group="2017")
 public class AutonomousAll extends OpMode {
     //
     @Override
