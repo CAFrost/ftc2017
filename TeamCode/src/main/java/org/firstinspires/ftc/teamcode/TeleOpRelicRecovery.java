@@ -59,7 +59,6 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="T:Relic Recovery", group="2017")
 public class TeleOpRelicRecovery extends OpMode
 {
-    // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor motorLeftFront = null;
     private DcMotor motorLeftRear= null;
@@ -67,70 +66,43 @@ public class TeleOpRelicRecovery extends OpMode
     private DcMotor motorRightRear = null;
     private DcMotor motorArm = null;
 
-
     private Servo servoClawLeft = null;
     double servoPosition = 0;
     private Servo servoClawRight = null;
 
-
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
         motorLeftFront  = hardwareMap.get(DcMotor.class, "m1");
         motorLeftRear  = hardwareMap.get(DcMotor.class, "m2");
         motorRightFront = hardwareMap.get(DcMotor.class, "m3");
         motorRightRear = hardwareMap.get(DcMotor.class, "m4");
         motorArm = hardwareMap.get(DcMotor.class, "ma");
 
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
         motorLeftFront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftRear.setDirection(DcMotor.Direction.FORWARD);
         motorRightFront.setDirection(DcMotor.Direction.REVERSE);
         motorRightRear.setDirection(DcMotor.Direction.REVERSE);
         motorArm.setDirection(DcMotor.Direction.FORWARD);
 
-
         servoClawLeft = hardwareMap.get(Servo.class, "s1");
         servoClawRight = hardwareMap.get(Servo.class, "s2");
 
-
-
-
-        // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
 
 
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
         double armPower;
 
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
-
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
         double drive = -gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
         leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
         rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
 
         // Send calculated power to wheels
         motorLeftFront.setPower(leftPower);
@@ -156,40 +128,24 @@ public class TeleOpRelicRecovery extends OpMode
 
         if (buttonClose)
         {
-            //if (clawIsOpen)
-            //{
-              //close claw
-                servoClawLeft.setPosition(0);
-                servoClawRight.setPosition(1);
-                telemetry.addData("Servos", "Left (%d), Right (%d)", 0, 1);
-            //}
+            closeClaw();
         }
         else if (buttonOpen)
         {
-            //if (!clawIsOpen)
-           //{
-             //open claw
-                servoClawLeft.setPosition(1);
-                servoClawRight.setPosition(0);
-                telemetry.addData("Servos", "Left (%d), Right (%d)", 1, 0);
-            //}
+            openClaw();
         }
-/*
-        double lastPosition = servoPosition;
-        servoPosition = (gamepad1.b) ? 0 : 1;
-
-        //servo1.setPosition(servo1power);
-        //servoPosition += 1. / 256.;
-        //if (servoPosition >= 1)
-        //    servoPosition = 0;
-        if (servoPosition != lastPosition) {
-            servoClawLeft.setPosition(servoPosition);
-        }
-
-        telemetry.addData("Servo1 Power", "servoClawLeft: (%.2f)", servoPosition);
-*/
     }
 
+    public void closeClaw(){
+        servoClawLeft.setPosition(0);
+        servoClawRight.setPosition(1);
+        telemetry.addData("Servos", "Left (%d), Right (%d)", 0, 1);
+    }
+    public void openClaw(){
+        servoClawLeft.setPosition(1);
+        servoClawRight.setPosition(0);
+        telemetry.addData("Servos", "Left (%d), Right (%d)", 1, 0);
+    }
     /*
      * Code to run ONCE after the driver hits STOP
      */
