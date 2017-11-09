@@ -152,22 +152,28 @@ public class TeleOpRelicRecovery extends OpMode
         //boolean
         boolean buttonOpen=gamepad2.a;
         boolean buttonClose=gamepad2.b;
+        telemetry.addData("Buttons", "Open (%b), Close (%b)", buttonOpen, buttonClose);
+
         if (buttonClose)
         {
-            if (clawIsOpen)
-            {
-                //close claw
-            }
+            //if (clawIsOpen)
+            //{
+              //close claw
+                servoClawLeft.setPosition(0);
+                servoClawRight.setPosition(1);
+                telemetry.addData("Servos", "Left (%d), Right (%d)", 0, 1);
+            //}
         }
         else if (buttonOpen)
         {
-            if (!clawIsOpen)
-            {
-                //open claw
-            }
+            //if (!clawIsOpen)
+           //{
+             //open claw
+                servoClawLeft.setPosition(1);
+                servoClawRight.setPosition(0);
+                telemetry.addData("Servos", "Left (%d), Right (%d)", 1, 0);
+            //}
         }
-        servoPosition = (gamepad1.b) ? 0 : 1;
-        telemetry.addData("Buttons", "Open (%b), Close (%b)", buttonOpen, buttonClose);
 /*
         double lastPosition = servoPosition;
         servoPosition = (gamepad1.b) ? 0 : 1;
@@ -182,10 +188,6 @@ public class TeleOpRelicRecovery extends OpMode
 
         telemetry.addData("Servo1 Power", "servoClawLeft: (%.2f)", servoPosition);
 */
-
-
-
-
     }
 
     /*
