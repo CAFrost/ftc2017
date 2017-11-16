@@ -80,10 +80,10 @@ public class TeleOpRelicRecovery extends OpMode
         motorRightRear = hardwareMap.get(DcMotor.class, "m4");
         motorArm = hardwareMap.get(DcMotor.class, "ma");
 
-        motorLeftFront.setDirection(DcMotor.Direction.FORWARD);
-        motorLeftRear.setDirection(DcMotor.Direction.FORWARD);
-        motorRightFront.setDirection(DcMotor.Direction.REVERSE);
-        motorRightRear.setDirection(DcMotor.Direction.REVERSE);
+        motorLeftFront.setDirection(DcMotor.Direction.REVERSE);
+        motorLeftRear.setDirection(DcMotor.Direction.REVERSE);
+        motorRightFront.setDirection(DcMotor.Direction.FORWARD);
+        motorRightRear.setDirection(DcMotor.Direction.FORWARD);
         motorArm.setDirection(DcMotor.Direction.FORWARD);
 
         servoClawLeft = hardwareMap.get(Servo.class, "s1");
@@ -101,8 +101,8 @@ public class TeleOpRelicRecovery extends OpMode
 
         double drive = -gamepad1.left_stick_y;
         double turn  =  gamepad1.right_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        leftPower    = Range.clip(drive + turn, -0.9, 0.9) ;
+        rightPower   = Range.clip(drive - turn, -0.9, 0.9) ;
 
         // Send calculated power to wheels
         motorLeftFront.setPower(leftPower);
@@ -114,8 +114,11 @@ public class TeleOpRelicRecovery extends OpMode
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
 
-        armPower = gamepad2.left_stick_y;
-        armPower   = Range.clip(armPower, -1.0, 1.0) ;
+        armPower = -gamepad2.left_stick_y;
+        armPower = Range.clip(armPower, -0.05, 0.6);
+        if (armPower < 0.25 && armPower > -0.01) {
+            armPower=0.20;
+        }
         motorArm.setPower(armPower);
         telemetry.addData("Arm", " (%.2f)", armPower);
 
